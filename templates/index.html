@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>CAN Dashboard Simulator</title>
+  <style>
+    body {
+      margin: 0;
+      padding: 0;
+      background: linear-gradient(135deg, #6a0dad, #8e44ad);
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      color: #fff;
+    }
+
+    .upload-container {
+      background-color: rgba(255, 255, 255, 0.1);
+      padding: 40px;
+      border-radius: 16px;
+      box-shadow: 0 8px 24px rgba(0, 0, 0, 0.2);
+      backdrop-filter: blur(8px);
+      width: 90%;
+      max-width: 500px;
+      text-align: center;
+    }
+
+    .upload-container h1 {
+      font-size: 24px;
+      margin-bottom: 30px;
+    }
+
+    .form-row {
+      display: flex;
+      justify-content: center;
+      gap: 15px;
+      margin-bottom: 20px;
+      flex-wrap: wrap;
+    }
+
+    .file-upload {
+      position: relative;
+    }
+
+    .file-upload input[type="file"] {
+      display: none;
+    }
+
+    .file-upload-label {
+      background-color: #7f50c4;
+      color: white;
+      padding: 12px 20px;
+      border-radius: 8px;
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      cursor: pointer;
+      transition: background 0.3s ease;
+    }
+
+    .file-upload-label:hover {
+      background-color: #6836aa;
+    }
+
+    .hidden-file-name {
+      margin-top: 10px;
+      font-size: 13px;
+      color: #eee;
+    }
+
+    input[type="submit"] {
+      background-color: #9b59b6;
+      border: none;
+      padding: 12px 20px;
+      font-size: 16px;
+      color: white;
+      border-radius: 8px;
+      cursor: pointer;
+      transition: background 0.3s ease;
+    }
+
+    input[type="submit"]:hover {
+      background-color: #7d3c98;
+    }
+
+    .note {
+      margin-top: 10px;
+      font-size: 14px;
+      color: #ddd;
+    }
+
+    /* Loading Overlay */
+    #loading-overlay {
+      position: fixed;
+      top: 0; left: 0;
+      width: 100%;
+      height: 100%;
+      background-color: rgba(106, 13, 173, 0.8);
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      flex-direction: column;
+      z-index: 9999;
+      display: none;
+    }
+
+    .spinner {
+      border: 8px solid rgba(255, 255, 255, 0.2);
+      border-top: 8px solid white;
+      border-radius: 50%;
+      width: 80px;
+      height: 80px;
+      animation: spin 1s linear infinite;
+    }
+
+    @keyframes spin {
+      0% { transform: rotate(0deg); }
+      100% { transform: rotate(360deg); }
+    }
+
+    .loading-text {
+      margin-top: 20px;
+      font-size: 22px;
+      color: #fff;
+    }
+  </style>
+</head>
+<body>
+  <div class="upload-container">
+    <h1>Upload CAN Trace File</h1>
+    <form method="POST" enctype="multipart/form-data" onsubmit="showLoading()">
+      <div class="form-row">
+        <div class="file-upload">
+          <label for="file" class="file-upload-label">
+            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="white" viewBox="0 0 24 24">
+              <path d="M19.35 10.04A7.49 7.49 0 0 0 5.29 6C3.19 6 1.5 7.69 1.5 9.79c0 1.87 1.4 3.42 3.25 3.7v.01h.25v.01h13.5a3.5 3.5 0 0 0 .1-7zM13 12v4h-2v-4H8l4-4 4 4h-3z"/>
+            </svg>
+            <span>Choose File</span>
+          </label>
+          <input type="file" name="tracefile" id="file" accept=".txt" required>
+        </div>
+        <input type="submit" value="Run Simulation">
+      </div>
+      <div id="filename" class="hidden-file-name"></div>
+    </form>
+    <p class="note">Accepted format: .txt</p>
+  </div>
+
+  <!-- Loading Overlay -->
+  <div id="loading-overlay">
+    <div class="spinner"></div>
+    <div class="loading-text">Processing...</div>
+  </div>
+
+  <script>
+    const input = document.getElementById('file');
+    const filenameDisplay = document.getElementById('filename');
+
+    input.addEventListener('change', () => {
+      const fileName = input.files.length > 0 ? input.files[0].name : 'No file chosen';
+      filenameDisplay.textContent = fileName;
+    });
+
+    function showLoading() {
+      document.getElementById('loading-overlay').style.display = 'flex';
+    }
+  </script>
+</body>
+</html>
