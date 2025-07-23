@@ -52,5 +52,8 @@ def download_file(filename):
 def download_page(filename):
     return render_template('download.html', filename=filename)
 
-if __name__ == '__main__':
-    app.run(debug=True)
+if __name__ == "__main__":
+    # Use Render-provided PORT, default to 5000 for local testing
+    port = int(os.environ.get("PORT", 5000))
+    app.run(host="0.0.0.0", port=port)
+
